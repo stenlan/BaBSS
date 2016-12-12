@@ -4,6 +4,53 @@
 
 .resultscontainer {
     width: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    float: right;
+}
+
+#chartdiv {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+fieldset {
+    float: left;
+    width: 60%;
+}
+
+.inputGroupContainer {
+    float: left;
+}
+
+.control-label {
+    float: left;
+    width: 20%;
+}
+
+#chartCheck {
+    width: 50%;
+    float: left;
+}
+
+.startCalc {
+    margin-left: 30px;
+    float: left;
+    padding-right: 0px;
+}
+
+#startCalcBtn {
+    float: right;
+    width: 70%;
+}
+
+#chartCheckboxLabel {
+    cursor: pointer;
+}
+
+#chartCheckbox {
+    cursor: pointer;
+}
+
+.form-horizontal {
+    z-index: 99;
 }

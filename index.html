@@ -10,81 +10,90 @@
 
 <body>
     <div class="form-horizontal">
+        <legend>&nbsp;BustaBit Script Simulator</legend>
         <fieldset>
             <!-- Form Name -->
-            <legend>&nbsp;BustaBit Script Simulator</legend>
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label">Starting Balance</label>
-                <div class="col-md-4 inputGroupContainer">
+                <label class="col-md-9 control-label">Starting Balance</label>
+                <div class="col-md-9 inputGroupContainer">
                     <div class="input-group"> <span class="input-group-addon"><i class="glyphicons glyphicons-usd"></i></span>
                         <input id="startBalInput" placeholder="Starting Balance" class="form-control" type="text"> </div>
                 </div>
             </div>
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label">Game Hash</label>
-                <div class="col-md-4 inputGroupContainer">
+                <label class="col-md-9 control-label">Game Hash</label>
+                <div class="col-md-9 inputGroupContainer">
                     <div class="input-group"> <span class="input-group-addon"><i class="glyphicons glyphicons-keys"></i></span>
                         <input id="endHash" placeholder="Game Hash" class="form-control" type="text" value="81a5e92d6d9114708f4cd12dda54ed34475e122bbb15428d34276d3c1add2e45"> </div>
                 </div>
             </div>
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label">Amount of games</label>
-                <div class="col-md-4 inputGroupContainer">
+                <label class="col-md-9 control-label">Amount of games</label>
+                <div class="col-md-9 inputGroupContainer">
                     <div class="input-group"> <span class="input-group-addon"><i class="glyphicons glyphicons-hash"></i></span>
                         <input id="backAmount" placeholder="Amount of games to calculate back" class="form-control" type="text"> </div>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label">Script</label>
-                <div class="col-md-4 inputGroupContainer">
+                <label class="col-md-9 control-label">Script</label>
+                <div class="col-md-9 inputGroupContainer">
                     <div class="input-group"> <span class="input-group-addon"><i class="glyphicons glyphicons-edit"></i></span>
                         <textarea id="scriptText" class="form-control" placeholder="Paste your script here"></textarea>
                     </div>
                 </div>
             </div>
-            <!-- Success message -->
             <!-- Button -->
             <div class="form-group">
-                <label class="col-md-4 control-label"></label>
-                <div class="col-md-4">
-                    <button id="startCalc" class="btn btn-primary">(Re)Start Calculation <span class="glyphicons glyphicons-calculator unlift"></span></button>
+                <div class="col-md-5 startCalc">
+                    <button id="startCalcBtn" class="btn btn-primary">(Re)Start Calculation <span class="glyphicons glyphicons-calculator unlift"></span></button>
+                </div>
+                <div class="col-md-9 unlift" id="chartCheck">
+                    <label id="chartCheckboxLabel">
+                        <input type="checkbox" id="chartCheckbox"> Enable Chart</label>
                 </div>
             </div>
         </fieldset>
+        <div class="resultscontainer">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Starting Balance</th>
+                        <td id="startBal"></td>
+                    </tr>
+                    <tr>
+                        <th>Lowest Balance</th>
+                        <td id="lowestBal"></td>
+                    </tr>
+                    <tr>
+                        <th>Lowest Net</th>
+                        <td id="lowestNet"></td>
+                    </tr>
+                    <tr>
+                        <th>Balance</th>
+                        <td id="balance"></td>
+                    </tr>
+                    <tr>
+                        <th>Profit</th>
+                        <td id="netProfit"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="resultscontainer">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>Starting Balance</th>
-                    <td id="startBal"></td>
-                </tr>
-                <tr>
-                    <th>Lowest Balance</th>
-                    <td id="lowestBal"></td>
-                </tr>
-                <tr>
-                    <th>Lowest Net</th>
-                    <td id="lowestNet"></td>
-                </tr>
-                <tr>
-                    <th>Balance</th>
-                    <td id="balance"></td>
-                </tr>
-                <tr>
-                    <th>Profit</th>
-                    <td id="netProfit"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div id="chartdiv"></div>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
+    <script src="scripts/core.js"></script>
+    <script src="scripts/sha256.js"></script>
+    <script src="scripts/hmac.js"></script>
+    <script src="scripts/BaBScriptTest.js"></script>
 </body>
-<script src="scripts/core.js"></script>
-<script src="scripts/sha256.js"></script>
-<script src="scripts/hmac.js"></script>
-<script src="scripts/BaBScriptTest.js"></script>
 
 </html>

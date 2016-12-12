@@ -3,13 +3,16 @@ var babScriptTester = {
     startBalance: 0
     , timeToStop: false
     , crashList: []
+    , makeChart: false
     , balance: this.startBalance
     , currentCrash: 0
     , lowestBalance: this.balance
     , gamesSinceUpdate: 0
     , alreadyCalcd: false
     , lastPlayedGameWon: false
+    , force_color: "green"
     , lastGamePlayed: false
+    , balanceLog: []
     , genOutcomes: function (hash, amount) {
         var lastHash = "";
         for (var i = 0; i < amount; i++) {
@@ -48,6 +51,7 @@ var babScriptTester = {
     }
 }
 babScriptTester.startCalculation = function () {
+    babScriptTester.makeChart = document.getElementById("chartCheckbox").checked;
     babScriptTester.startBalance = parseInt(document.getElementById("startBalInput").value) * 100;
     babScriptTester.balance = babScriptTester.startBalance;
     babScriptTester.lowestBalance = babScriptTester.balance;
@@ -83,12 +87,88 @@ babScriptTester.startCalculation = function () {
                 babScriptTester.lastGamePlayed = true;
             }
             console.log("Balance: " + ((babScriptTester.balance) / 100));
+            if (babScriptTester.makeChart) {
+                if (babScriptTester.prevBalance) {
+                    babScriptTester.force_color = babScriptTester.prevBalance > babScriptTester.balance ? "red" : "green";
+                }
+                babScriptTester.balanceLog.push({
+                    n: iterator
+                    , balance: babScriptTester.balance / 100
+                    , force_color: babScriptTester.force_color
+                });
+                babScriptTester.prevBalance = babScriptTester.balance;
+            }
         }
         document.getElementById("startBal").innerHTML = Math.round(babScriptTester.startBalance) / 100;
         document.getElementById("lowestBal").innerHTML = Math.round(babScriptTester.lowestBalance) / 100;
         document.getElementById("lowestNet").innerHTML = Math.round(babScriptTester.lowestBalance - babScriptTester.startBalance) / 100;
         document.getElementById("balance").innerHTML = Math.round(babScriptTester.balance) / 100;
         document.getElementById("netProfit").innerHTML = Math.round(babScriptTester.balance - babScriptTester.startBalance) / 100;
+        if (babScriptTester.makeChart) {
+            babScriptTester.chart = AmCharts.makeChart("chartdiv", {
+                "type": "serial"
+                , "theme": "none"
+                , "autoMargins": true
+                , "categoryField": "n"
+                , "valueAxes": [{
+                    "id": "v1"
+                    , "axisAlpha": 0
+                    , "inside": true
+                    , "title": "Balance"
+    }]
+                , "graphs": [{
+                    "id": "g1"
+                    , "balloon": {
+                        "drop": true
+                        , "adjustBorderColor": false
+                        , borderColor: "#000000"
+                        , "color": "#ffffff"
+                    }
+                    , "bullet": "round"
+                    , "bulletBorderAlpha": 1
+                    , "bulletColor": "green"
+                    , "lineColor": "green"
+                    , "useNegativeColorIfDown": true
+                    , bulletBorderColor: "#FFFFFF"
+                    , "bulletBorderThickness": 2
+                    , "negativeLineColor": "red"
+                    , "bulletSize": 8
+                    , colorField: "force_color"
+                    , "lineThickness": 2
+                    , "title": "red line"
+                    , "valueField": "balance"
+                    , "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+    }]
+                , "chartScrollbar": {
+                    "graph": "g1"
+                    , "oppositeAxis": false
+                    , "offset": 30
+                    , "scrollbarHeight": 80
+                    , "backgroundAlpha": 0
+                    , "selectedBackgroundAlpha": 0.1
+                    , "selectedBackgroundColor": "#888888"
+                    , "graphFillAlpha": 0
+                    , "graphLineAlpha": 0.5
+                    , "selectedGraphFillAlpha": 0
+                    , "selectedGraphLineAlpha": 1
+                    , "autoGridCount": true
+                    , "color": "#AAAAAA"
+                }
+                , "chartCursor": {
+                    "cursorColor": "black"
+                }
+                , "categoryAxis": {
+                    "dashLength": 1
+                    , "minorGridEnabled": true
+                }
+                , "export": {
+                    "enabled": true
+                }
+                , "dataProvider": babScriptTester.balanceLog
+            });
+            babScriptTester.chart.addListener("rendered", zoomChart);
+            zoomChart();
+        }
     }
 }
 engine.player_bet = function () {}
@@ -133,6 +213,13 @@ engine.lastGamePlay = function () {
         return babScriptTester.lastPlayedGameWon ? "WON" : "LOST";
     }
 }
+
+function zoomChart() {
+    babScriptTester.chart.zoomToIndexes(babScriptTester.chart.dataProvider.length - 40, babScriptTester.chart.dataProvider.length - 1);
+    setTimeout(function () {
+        document.getElementById("chartdiv").style.overflow = "hidden";
+    }, 500);
+}
 engine.placeBet = function (bet, multiplier) {
     babScriptTester.gamesSinceUpdate = 0;
     if (babScriptTester.timeToStop) {
@@ -158,4 +245,4 @@ engine.placeBet = function (bet, multiplier) {
         babScriptTester.lowestBalance = babScriptTester.balance;
     }
 }
-document.getElementById("startCalc").addEventListener("click", babScriptTester.startCalculation);
+document.getElementById("startCalcBtn").addEventListener("click", babScriptTester.startCalculation);
