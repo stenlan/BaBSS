@@ -62,6 +62,14 @@ babScriptTester.startCalculation = function () {
         babScriptTester.alreadyCalcd = true;
         eval(document.getElementById("scriptText").value);
         babScriptTester.genOutcomes(document.getElementById("endHash").value, parseInt(document.getElementById("backAmount").value));
+        if (babScriptTester.makeChart) {
+            babScriptTester.prevBalance = babScriptTester.startBalance;
+            babScriptTester.balanceLog.push({
+                n: 0
+                , balance: babScriptTester.startBalance / 100
+                , force_color: "green"
+            });
+        }
         for (var iterator = 0; iterator < babScriptTester.crashList.length; iterator++) {
             babScriptTester.gamesSinceUpdate++;
             babScriptTester.currentCrash = babScriptTester.crashList[iterator];
@@ -92,7 +100,7 @@ babScriptTester.startCalculation = function () {
                     babScriptTester.force_color = babScriptTester.prevBalance > babScriptTester.balance ? "red" : "green";
                 }
                 babScriptTester.balanceLog.push({
-                    n: iterator
+                    n: iterator + 1
                     , balance: babScriptTester.balance / 100
                     , force_color: babScriptTester.force_color
                 });
@@ -175,6 +183,7 @@ engine.player_bet = function () {}
 engine.game_starting = function () {}
 engine.game_started = function () {}
 engine.game_crash = function () {}
+engine.cashed_out = function (args) {}
 engine.getUsername = function () {
     return "usersUsername";
 }
