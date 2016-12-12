@@ -54,3 +54,20 @@ fieldset {
 .form-horizontal {
     z-index: 99;
 }
+
+.discordBtn {
+    float:right;
+    background-color: #7289DA;
+    border-color: #7289DA;
+    margin-top: 2px;
+    margin-right: 5px;
+}
+legend {
+    height: 40px;
+}
+
+.btcBtn {
+    float:right;
+    margin-top: 2px;
+    margin-right: 10px;
+}
