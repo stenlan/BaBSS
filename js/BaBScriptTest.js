@@ -72,6 +72,7 @@ babScriptTester.simulateFromAuto = function (baseBetInBits, autoCashoutAt, stopA
             }
             else {
                 currentBet *= increaseBetByOnLoss;
+                currentBet = Math.round(currentBet);
             }
         }
         else if (engine.lastGamePlay() == "NOT_PLAYED") {
@@ -81,6 +82,7 @@ babScriptTester.simulateFromAuto = function (baseBetInBits, autoCashoutAt, stopA
             engine.placeBet(currentBet, autoCashoutAtPercentage);
         }
         else {
+            alert("Bet above maximum bet. Stopping simulation. All bets up and until this point have been simulated.");
             engine.stop();
         }
     });
@@ -168,7 +170,7 @@ babScriptTester.startCalculation = function () {
                     , "graphs": [{
                         "id": "g1"
                         , "balloon": {
-                            "drop": true
+                            "drop": false
                             , "adjustBorderColor": false
                             , borderColor: "#000000"
                             , "color": "#ffffff"
