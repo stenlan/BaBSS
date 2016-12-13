@@ -6,6 +6,7 @@ var babScriptTester = {
     , makeChart: false
     , balance: this.startBalance
     , currentCrash: 0
+    , listeners: {}
     , lowestBalance: this.balance
     , gamesSinceUpdate: 0
     , alreadyCalcd: false
@@ -85,142 +86,142 @@ babScriptTester.simulateFromAuto = function (baseBetInBits, autoCashoutAt, stopA
     });
 }
 babScriptTester.startCalculation = function () {
-    babScriptTester.makeChart = document.getElementById("chartCheckbox").checked;
-    babScriptTester.startBalance = parseInt(document.getElementById("startBalInput").value) * 100;
-    babScriptTester.balance = babScriptTester.startBalance;
-    babScriptTester.lowestBalance = babScriptTester.balance;
-    if (babScriptTester.alreadyCalcd) {
-        location.reload();
-    }
-    else {
-        babScriptTester.alreadyCalcd = true;
-        if (document.getElementById("autoCheckbox").checked) {
-            babScriptTester.simulateFromAuto(parseInt(document.getElementById("autoBaseBet").value), Math.round(parseFloat(document.getElementById("autoAutoCashout").value) * 100) / 100, parseInt(document.getElementById("autoStopAt").value), document.getElementById("lossRtbb").checked, document.getElementById("winRtbb").checked, parseFloat(document.getElementById("lossIbb").value), parseFloat(document.getElementById("winIbb").value));
+        babScriptTester.makeChart = document.getElementById("chartCheckbox").checked;
+        babScriptTester.startBalance = parseInt(document.getElementById("startBalInput").value) * 100;
+        babScriptTester.balance = babScriptTester.startBalance;
+        babScriptTester.lowestBalance = babScriptTester.balance;
+        if (babScriptTester.alreadyCalcd) {
+            location.reload();
         }
         else {
-            eval(document.getElementById("scriptText").value);
-        }
-        babScriptTester.genOutcomes(document.getElementById("endHash").value, parseInt(document.getElementById("backAmount").value));
-        if (babScriptTester.makeChart) {
-            babScriptTester.prevBalance = babScriptTester.startBalance;
-            babScriptTester.balanceLog.push({
-                n: 0
-                , balance: Math.round(babScriptTester.startBalance) / 100
-                , force_color: "green"
-            });
-        }
-        for (var iterator = 0; iterator < babScriptTester.crashList.length; iterator++) {
-            if (babScriptTester.timeToStop) {
-                break;
-            }
-            babScriptTester.gamesSinceUpdate++;
-            babScriptTester.currentCrash = babScriptTester.crashList[iterator];
-            engine.game_starting({
-                game_id: "1"
-                , time_till_start: 5000
-            });
-            engine.game_started({});
-            console.log("Crashing at: " + babScriptTester.currentCrash);
-            engine.game_crash({
-                game_crash: babScriptTester.currentCrash * 100
-            });
-            if (babScriptTester.gamesSinceUpdate) {
-                babScriptTester.lastGamePlayed = false;
+            babScriptTester.alreadyCalcd = true;
+            if (document.getElementById("autoCheckbox").checked) {
+                babScriptTester.simulateFromAuto(parseInt(document.getElementById("autoBaseBet").value), parseFloat(document.getElementById("autoAutoCashout").value).toFixed(2), parseInt(document.getElementById("autoStopAt").value), document.getElementById("lossRtbb").checked, document.getElementById("winRtbb").checked, parseFloat(document.getElementById("lossIbb").value), parseFloat(document.getElementById("winIbb").value));
             }
             else {
-                babScriptTester.lastGamePlayed = true;
+                eval(document.getElementById("scriptText").value);
             }
-            console.log("Balance: " + ((babScriptTester.balance) / 100));
+            babScriptTester.genOutcomes(document.getElementById("endHash").value, parseInt(document.getElementById("backAmount").value));
             if (babScriptTester.makeChart) {
-                if (babScriptTester.prevBalance) {
-                    babScriptTester.force_color = babScriptTester.prevBalance > babScriptTester.balance ? "red" : "green";
-                }
+                babScriptTester.prevBalance = babScriptTester.startBalance;
                 babScriptTester.balanceLog.push({
-                    n: iterator + 1
-                    , balance: Math.round(babScriptTester.balance) / 100
-                    , force_color: babScriptTester.force_color
+                    n: 0
+                    , balance: Math.round(babScriptTester.startBalance) / 100
+                    , force_color: "green"
                 });
-                babScriptTester.prevBalance = babScriptTester.balance;
             }
-            if (babScriptTester.timeToStop) {
-                babScriptTester.lastGame = iterator + 1;
-            }
-        }
-        document.getElementById("numGames").innerHTML = babScriptTester.timeToStop ? babScriptTester.lastGame : babScriptTester.crashList.length;
-        document.getElementById("startBal").innerHTML = Math.round(babScriptTester.startBalance) / 100;
-        document.getElementById("lowestBal").innerHTML = Math.round(babScriptTester.lowestBalance) / 100;
-        document.getElementById("lowestNet").innerHTML = Math.round(babScriptTester.lowestBalance - babScriptTester.startBalance) / 100;
-        document.getElementById("balance").innerHTML = Math.round(babScriptTester.balance) / 100;
-        document.getElementById("netProfit").innerHTML = Math.round(babScriptTester.balance - babScriptTester.startBalance) / 100;
-        if (babScriptTester.makeChart) {
-            babScriptTester.chart = AmCharts.makeChart("chartdiv", {
-                "type": "serial"
-                , "theme": "none"
-                , "autoMargins": true
-                , "categoryField": "n"
-                , "valueAxes": [{
-                    "id": "v1"
-                    , "axisAlpha": 0
-                    , "inside": true
-                    , "title": "Balance"
-    }]
-                , "graphs": [{
-                    "id": "g1"
-                    , "balloon": {
-                        "drop": true
-                        , "adjustBorderColor": false
-                        , borderColor: "#000000"
-                        , "color": "#ffffff"
+            for (var iterator = 0; iterator < babScriptTester.crashList.length; iterator++) {
+                if (babScriptTester.timeToStop) {
+                    break;
+                }
+                babScriptTester.gamesSinceUpdate++;
+                babScriptTester.currentCrash = babScriptTester.crashList[iterator];
+                babScriptTester.engineFunc("game_starting", {
+                    game_id: "1"
+                    , time_till_start: 5000
+                });
+                babScriptTester.engineFunc("game_started", {});
+                console.log("Crashing at: " + babScriptTester.currentCrash);
+                babScriptTester.engineFunc("game_crash", {
+                    game_crash: babScriptTester.currentCrash * 100
+                });
+                if (babScriptTester.gamesSinceUpdate) {
+                    babScriptTester.lastGamePlayed = false;
+                }
+                else {
+                    babScriptTester.lastGamePlayed = true;
+                }
+                console.log("Balance: " + ((babScriptTester.balance) / 100));
+                if (babScriptTester.makeChart) {
+                    if (babScriptTester.prevBalance) {
+                        babScriptTester.force_color = babScriptTester.prevBalance > babScriptTester.balance ? "red" : "green";
                     }
-                    , "bullet": "round"
-                    , "bulletBorderAlpha": 1
-                    , "bulletColor": "green"
-                    , "lineColor": "green"
-                    , "useNegativeColorIfDown": true
-                    , bulletBorderColor: "#FFFFFF"
-                    , "bulletBorderThickness": 2
-                    , "negativeLineColor": "red"
-                    , "bulletSize": 8
-                    , colorField: "force_color"
-                    , "lineThickness": 2
-                    , "title": "red line"
-                    , "valueField": "balance"
-                    , "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+                    babScriptTester.balanceLog.push({
+                        n: iterator + 1
+                        , balance: Math.round(babScriptTester.balance) / 100
+                        , force_color: babScriptTester.force_color
+                    });
+                    babScriptTester.prevBalance = babScriptTester.balance;
+                }
+                if (babScriptTester.timeToStop) {
+                    babScriptTester.lastGame = iterator + 1;
+                }
+            }
+            document.getElementById("numGames").innerHTML = babScriptTester.timeToStop ? babScriptTester.lastGame : babScriptTester.crashList.length;
+            document.getElementById("startBal").innerHTML = Math.round(babScriptTester.startBalance) / 100;
+            document.getElementById("lowestBal").innerHTML = Math.round(babScriptTester.lowestBalance) / 100;
+            document.getElementById("lowestNet").innerHTML = Math.round(babScriptTester.lowestBalance - babScriptTester.startBalance) / 100;
+            document.getElementById("balance").innerHTML = Math.round(babScriptTester.balance) / 100;
+            document.getElementById("netProfit").innerHTML = Math.round(babScriptTester.balance - babScriptTester.startBalance) / 100;
+            if (babScriptTester.makeChart) {
+                babScriptTester.chart = AmCharts.makeChart("chartdiv", {
+                    "type": "serial"
+                    , "theme": "none"
+                    , "autoMargins": true
+                    , "categoryField": "n"
+                    , "valueAxes": [{
+                        "id": "v1"
+                        , "axisAlpha": 0
+                        , "inside": true
+                        , "title": "Balance"
     }]
-                , "chartScrollbar": {
-                    "graph": "g1"
-                    , "oppositeAxis": false
-                    , "offset": 30
-                    , "scrollbarHeight": 80
-                    , "backgroundAlpha": 0
-                    , "selectedBackgroundAlpha": 0.1
-                    , "selectedBackgroundColor": "#888888"
-                    , "graphFillAlpha": 0
-                    , "graphLineAlpha": 0.5
-                    , "selectedGraphFillAlpha": 0
-                    , "selectedGraphLineAlpha": 1
-                    , "autoGridCount": true
-                    , "color": "#AAAAAA"
-                }
-                , "chartCursor": {
-                    "cursorColor": "black"
-                }
-                , "categoryAxis": {
-                    "dashLength": 1
-                    , "minorGridEnabled": true
-                }
-                , "dataProvider": babScriptTester.balanceLog
-            });
-            babScriptTester.chart.addListener("rendered", zoomChart);
-            zoomChart();
+                    , "graphs": [{
+                        "id": "g1"
+                        , "balloon": {
+                            "drop": true
+                            , "adjustBorderColor": false
+                            , borderColor: "#000000"
+                            , "color": "#ffffff"
+                        }
+                        , "bullet": "round"
+                        , "bulletBorderAlpha": 1
+                        , "bulletColor": "green"
+                        , "lineColor": "green"
+                        , "useNegativeColorIfDown": true
+                        , bulletBorderColor: "#FFFFFF"
+                        , "bulletBorderThickness": 2
+                        , "negativeLineColor": "red"
+                        , "bulletSize": 8
+                        , colorField: "force_color"
+                        , "lineThickness": 2
+                        , "title": "red line"
+                        , "valueField": "balance"
+                        , "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+    }]
+                    , "chartScrollbar": {
+                        "graph": "g1"
+                        , "oppositeAxis": false
+                        , "offset": 30
+                        , "scrollbarHeight": 80
+                        , "backgroundAlpha": 0
+                        , "selectedBackgroundAlpha": 0.1
+                        , "selectedBackgroundColor": "#888888"
+                        , "graphFillAlpha": 0
+                        , "graphLineAlpha": 0.5
+                        , "selectedGraphFillAlpha": 0
+                        , "selectedGraphLineAlpha": 1
+                        , "autoGridCount": true
+                        , "color": "#AAAAAA"
+                    }
+                    , "chartCursor": {
+                        "cursorColor": "black"
+                    }
+                    , "categoryAxis": {
+                        "dashLength": 1
+                        , "minorGridEnabled": true
+                    }
+                    , "dataProvider": babScriptTester.balanceLog
+                });
+                babScriptTester.chart.addListener("rendered", zoomChart);
+                zoomChart();
+            }
         }
     }
-}
-engine.player_bet = function () {}
-engine.game_starting = function () {}
-engine.game_started = function () {}
-engine.game_crash = function () {}
-engine.cashed_out = function (args) {}
+    /*engine.player_bet = function () {}
+    engine.game_starting = function () {}
+    engine.game_started = function () {}
+    engine.game_crash = function () {}
+    engine.cashed_out = function (args) {}*/
 engine.getUsername = function () {
     return "usersUsername";
 }
@@ -228,7 +229,20 @@ engine.getBalance = function () {
     return babScriptTester.balance;
 }
 engine.on = function (identifier, response) {
-    engine[identifier] = response;
+    if (babScriptTester.listeners[identifier]) {
+        babScriptTester.listeners[identifier][babScriptTester.listeners[identifier].length] = response;
+    }
+    else {
+        babScriptTester.listeners[identifier] = [];
+        babScriptTester.listeners[identifier][0] = response;
+    }
+}
+babScriptTester.engineFunc = function (identifier, argument) {
+    if (babScriptTester.listeners[identifier]) {
+        for (var i = 0; i < babScriptTester.listeners[identifier].length; i++) {
+            babScriptTester.listeners[identifier][i](argument);
+        }
+    }
 }
 engine.stop = function () {
     babScriptTester.timeToStop = true;
@@ -271,14 +285,14 @@ engine.placeBet = function (bet, multiplier) {
     if (babScriptTester.timeToStop) {
         return;
     }
-    engine.player_bet({
+    babScriptTester.engineFunc("player_bet", {
         username: "usersUsername"
         , index: 0
     });
     babScriptTester.balance -= bet;
     if (multiplier <= babScriptTester.currentCrash * 100) {
         babScriptTester.balance += bet * (multiplier / 100);
-        engine.cashed_out({
+        babScriptTester.engineFunc("cashed_out", {
             username: "usersUsername"
             , stopped_at: multiplier
         });
@@ -288,7 +302,7 @@ engine.placeBet = function (bet, multiplier) {
         babScriptTester.lastPlayedGameWon = false;
     }
     if (babScriptTester.balance < 0) {
-        alert("Negative balance (out of money), so can't bet anymore. All bets up and until this point are simulated.");
+        alert("Negative balance (out of money), so can't bet anymore. All bets up and until this point have been simulated.");
         engine.stop();
     }
     if (babScriptTester.balance < babScriptTester.lowestBalance) {
