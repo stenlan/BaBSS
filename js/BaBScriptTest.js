@@ -288,7 +288,7 @@ engine.placeBet = function (bet, multiplier) {
         babScriptTester.lastPlayedGameWon = false;
     }
     if (babScriptTester.balance < 0) {
-        alert("Negative balance. Stopping.");
+        alert("Negative balance (out of money), so can't bet anymore. All bets up and until this point are simulated.");
         engine.stop();
     }
     if (babScriptTester.balance < babScriptTester.lowestBalance) {
