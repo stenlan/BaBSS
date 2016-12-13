@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bustabit Script Simulator</title>
     <link rel='stylesheet prefetch' href='css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='css/glyphicons.css'>
-    <link rel="stylesheet" href="css/style.css"> </head>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Bustabit Script Simulator</title>
+</head>
 
 <body>
     <div class="form-horizontal">
@@ -16,7 +17,7 @@
             <div class="form-group">
                 <label class="col-md-9 control-label">Starting Balance</label>
                 <div class="col-md-9 inputGroupContainer">
-                    <div class="input-group"> <span class="input-group-addon"><i class="glyphicons glyphicons-usd"></i></span>
+                    <div class="input-group"> <span class="input-group-addon"><i class="glyphicons glyphicons-bitcoin"></i></span>
                         <input id="startBalInput" placeholder="Starting Balance" class="form-control" type="text"> </div>
                 </div>
             </div>
@@ -46,18 +47,25 @@
             </div>
             <!-- Button -->
             <div class="form-group">
-                <div class="col-md-5 startCalc">
+                <div class="col-md-3 startCalc">
                     <button id="startCalcBtn" class="btn btn-primary">(Re)Start Calculation <span class="glyphicons glyphicons-calculator unlift"></span></button>
                 </div>
                 <div class="col-md-9 unlift" id="chartCheck">
-                    <label id="chartCheckboxLabel">
-                        <input type="checkbox" id="chartCheckbox"> Enable Chart</label>
+                    <label class="checkboxy">
+                        <input type="checkbox" class="checkboxy" id="chartCheckbox"> Enable Chart</label>
                 </div>
+                <div class="col-md-9 unlift" id="autoCheck">
+                    <label class="checkboxy">
+                        <input type="checkbox" class="checkboxy" id="autoCheckbox"> Use Auto Config (ignores script)</label> <a class="checkboxy" data-toggle="modal" data-target="#autoModal"><small>(Configure)</small></a></div>
             </div>
         </fieldset>
         <div class="resultscontainer">
             <table class="table">
                 <tbody>
+                    <tr>
+                        <th># Games played</th>
+                        <td id="numGames"></td>
+                    </tr>
                     <tr>
                         <th>Starting Balance</th>
                         <td id="startBal"></td>
@@ -82,17 +90,69 @@
             </table>
         </div>
     </div>
+    <div class="modal fade" id="autoModal" tabindex="-1" role="dialog" aria-labelledby="autoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    <h4 class="modal-title" id="autoModalLabel">Auto Settings</h4> </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>Base Bet:
+                                    <input id="autoBaseBet" type="text" class="autoInput" value="1"> Bits</td>
+                            </tr>
+                            <tr>
+                                <td>Auto Cashout at:
+                                    <input id="autoAutoCashout" type="text" class="autoInput" value="2">&#215;</td>
+                            </tr>
+                            <tr>
+                                <td>Stop if bet is &gt;
+                                    <input id="autoStopAt" type="text" class="autoInput" value="1000000"> Bits</td>
+                            </tr>
+                            <tr>
+                                <td>On loss:
+                                    <br>
+                                    <label class="radioey">
+                                        <input id="lossRtbb" class="radioey" type="radio" name="onLoss" checked> Return to base bet</label>
+                                    <br/>
+                                    <label class="radioey">
+                                        <input class="radioey" type="radio" name="onLoss"> Increase bet by:
+                                        <input type="text" id="lossIbb" class="autoInput" value="2">&#215; </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>On win:
+                                    <br>
+                                    <label class="radioey">
+                                        <input id="winRtbb" class="radioey" type="radio" name="onWin" checked> Return to base bet</label>
+                                    <br>
+                                    <label class="radioey">
+                                        <input class="radioey" type="radio" name="onWin" value="ibbb"> Increase bet by:
+                                        <input type="text" id="winIbb" class="autoInput" value="2">&#215; </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="chartdiv"></div>
+    <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
-    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-    <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
-    <script src="scripts/core.js"></script>
-    <script src="scripts/sha256.js"></script>
-    <script src="scripts/hmac.js"></script>
-    <script src="scripts/BaBScriptTest.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/sha256.js"></script>
+    <script src="js/hmac.js"></script>
+    <script src="js/BaBScriptTest.js"></script>
 </body>
 
 </html>

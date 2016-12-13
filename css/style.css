@@ -28,26 +28,27 @@ fieldset {
 }
 
 #chartCheck {
-    width: 50%;
+    width: 17%;
+    float: left;
+}
+
+#autoCheck {
+    width: 40%;
     float: left;
 }
 
 .startCalc {
-    margin-left: 30px;
+    margin-left: 60px;
     float: left;
     padding-right: 0px;
 }
 
 #startCalcBtn {
     float: right;
-    width: 70%;
+    width: 100%;
 }
 
-#chartCheckboxLabel {
-    cursor: pointer;
-}
-
-#chartCheckbox {
+.checkboxy {
     cursor: pointer;
 }
 
@@ -56,18 +57,39 @@ fieldset {
 }
 
 .discordBtn {
-    float:right;
+    float: right;
     background-color: #7289DA;
     border-color: #7289DA;
     margin-top: 2px;
     margin-right: 5px;
 }
+
 legend {
     height: 40px;
 }
 
 .btcBtn {
-    float:right;
+    float: right;
     margin-top: 2px;
     margin-right: 10px;
+}
+
+.modal,
+.modal-dialog {
+    margin: 5px auto;
+    width: 300px;
+}
+
+input.autoInput {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid #BDBDBD;
+    width: 80px;
+    text-align: center;
+}
+
+.radioey {
+    cursor: pointer;
+    font-weight: normal;
 }
