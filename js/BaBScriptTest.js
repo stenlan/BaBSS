@@ -212,6 +212,9 @@ babScriptTester.startCalculation = function () {
                         "dashLength": 1
                         , "minorGridEnabled": true
                     }
+                    , "export": {
+                        "enabled": true
+                    }
                     , "dataProvider": babScriptTester.balanceLog
                 });
                 babScriptTester.chart.addListener("rendered", zoomChart);
@@ -283,6 +286,11 @@ function zoomChart() {
     }, 500);
 }
 engine.placeBet = function (bet, multiplier) {
+    if (babScriptTester.balance - bet < 0) {
+        alert("Attempted to make bet higher than balance, so can't bet anymore. All bets up and until this point have been simulated.");
+        bet = 0;
+        engine.stop();
+    }
     babScriptTester.gamesSinceUpdate = 0;
     if (babScriptTester.timeToStop) {
         return;
