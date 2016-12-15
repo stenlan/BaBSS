@@ -350,7 +350,7 @@ window.onload = function () {
                 inputElements[i].value = babScriptTester.getCookie(inputElements[i].id);
             }
             else if (inputElements[i].type == "checkbox" || inputElements[i].type == "radio") {
-                inputElements[i].checked = babScriptTester.getCookie(inputElements[i].id);
+                inputElements[i].checked = babScriptTester.getCookie(inputElements[i].id) == "true";
             }
         }
     }
