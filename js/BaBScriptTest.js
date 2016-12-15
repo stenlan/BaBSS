@@ -262,8 +262,11 @@ babScriptTester.savePrefs = function () {
     var inputElements = document.getElementsByTagName("input");
     var textareaElement = document.getElementsByTagName("textarea")[0];
     for (var i = 0; i < inputElements.length; i++) {
-        if (inputElements[i].type != "button") {
+        if (inputElements[i].type == "text") {
             babScriptTester.setCookie(inputElements[i].id, inputElements[i].value);
+        }
+        else if (inputElements[i].type == "checkbox" || inputElements[i].type == "radio") {
+            babScriptTester.setCookie(inputElements[i].id, inputElements[i].checked);
         }
     }
     babScriptTester.setCookie(textareaElement.id, textareaElement.value);
@@ -343,7 +346,12 @@ window.onload = function () {
     var textareaElement = document.getElementsByTagName("textarea")[0];
     for (var i = 0; i < inputElements.length; i++) {
         if (babScriptTester.getCookie(inputElements[i].id)) {
-            inputElements[i].value = babScriptTester.getCookie(inputElements[i].id);
+            if (inputElements[i].type == "text") {
+                inputElements[i].value = babScriptTester.getCookie(inputElements[i].id);
+            }
+            else if (inputElements[i].type == "checkbox" || inputElements[i].type == "radio") {
+                inputElements[i].checked = babScriptTester.getCookie(inputElements[i].id);
+            }
         }
     }
     if (babScriptTester.getCookie(textareaElement.id)) {
