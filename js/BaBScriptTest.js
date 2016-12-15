@@ -88,6 +88,7 @@ babScriptTester.simulateFromAuto = function (baseBetInBits, autoCashoutAt, stopA
     });
 }
 babScriptTester.startCalculation = function () {
+        babScriptTester.savePrefs();
         babScriptTester.makeChart = document.getElementById("chartCheckbox").checked;
         babScriptTester.startBalance = parseInt(document.getElementById("startBalInput").value) * 100;
         babScriptTester.balance = babScriptTester.startBalance;
@@ -249,6 +250,24 @@ babScriptTester.engineFunc = function (identifier, argument) {
         }
     }
 }
+babScriptTester.getCookie = function (name) {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? unescape(value[1]) : null;
+}
+babScriptTester.setCookie = function (name, value) {
+    document.cookie = name + "=" + escape(value) + "; path=/; expires=" + new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toGMTString();
+}
+babScriptTester.savePrefs = function () {
+    var inputElements = document.getElementsByTagName("input");
+    var textareaElement = document.getElementsByTagName("textarea")[0];
+    for (var i = 0; i < inputElements.length; i++) {
+        if (inputElements[i].type != "button") {
+            babScriptTester.setCookie(inputElements[i].id, inputElements[i].value);
+        }
+    }
+    babScriptTester.setCookie(textareaElement.id, textareaElement.value);
+}
 engine.stop = function () {
     babScriptTester.timeToStop = true;
 }
@@ -319,4 +338,16 @@ engine.placeBet = function (bet, multiplier) {
         babScriptTester.lowestBalance = babScriptTester.balance;
     }
 }
+window.onload = function () {
+    var inputElements = document.getElementsByTagName("input");
+    var textareaElement = document.getElementsByTagName("textarea")[0];
+    for (var i = 0; i < inputElements.length; i++) {
+        if (babScriptTester.getCookie(inputElements[i].id)) {
+            inputElements[i].value = babScriptTester.getCookie(inputElements[i].id);
+        }
+    }
+    if (babScriptTester.getCookie(textareaElement.id)) {
+        textareaElement.value = babScriptTester.getCookie(textareaElement.id);
+    }
+};
 document.getElementById("startCalcBtn").addEventListener("click", babScriptTester.startCalculation);
