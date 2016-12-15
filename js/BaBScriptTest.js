@@ -250,26 +250,18 @@ babScriptTester.engineFunc = function (identifier, argument) {
         }
     }
 }
-babScriptTester.getCookie = function (name) {
-    var re = new RegExp(name + "=([^;]+)");
-    var value = re.exec(document.cookie);
-    return (value != null) ? unescape(value[1]) : null;
-}
-babScriptTester.setCookie = function (name, value) {
-    document.cookie = name + "=" + escape(value) + "; path=/; expires=" + new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toGMTString();
-}
 babScriptTester.savePrefs = function () {
     var inputElements = document.getElementsByTagName("input");
     var textareaElement = document.getElementsByTagName("textarea")[0];
     for (var i = 0; i < inputElements.length; i++) {
         if (inputElements[i].type == "text") {
-            babScriptTester.setCookie(inputElements[i].id, inputElements[i].value);
+            localStorage.setItem(inputElements[i].id, inputElements[i].value);
         }
         else if (inputElements[i].type == "checkbox" || inputElements[i].type == "radio") {
-            babScriptTester.setCookie(inputElements[i].id, inputElements[i].checked);
+            localStorage.setItem(inputElements[i].id, inputElements[i].checked);
         }
     }
-    babScriptTester.setCookie(textareaElement.id, textareaElement.value);
+    localStorage.setItem(textareaElement.id, textareaElement.value);
 }
 engine.stop = function () {
     babScriptTester.timeToStop = true;
@@ -345,17 +337,17 @@ window.onload = function () {
     var inputElements = document.getElementsByTagName("input");
     var textareaElement = document.getElementsByTagName("textarea")[0];
     for (var i = 0; i < inputElements.length; i++) {
-        if (babScriptTester.getCookie(inputElements[i].id)) {
+        if (localStorage.getItem(inputElements[i].id)) {
             if (inputElements[i].type == "text") {
-                inputElements[i].value = babScriptTester.getCookie(inputElements[i].id);
+                inputElements[i].value = localStorage.getItem(inputElements[i].id);
             }
             else if (inputElements[i].type == "checkbox" || inputElements[i].type == "radio") {
-                inputElements[i].checked = babScriptTester.getCookie(inputElements[i].id) == "true";
+                inputElements[i].checked = localStorage.getItem(inputElements[i].id) == "true";
             }
         }
     }
-    if (babScriptTester.getCookie(textareaElement.id)) {
-        textareaElement.value = babScriptTester.getCookie(textareaElement.id);
+    if (localStorage.getItem(textareaElement.id)) {
+        textareaElement.value = localStorage.getItem(textareaElement.id);
     }
 };
 document.getElementById("startCalcBtn").addEventListener("click", babScriptTester.startCalculation);
