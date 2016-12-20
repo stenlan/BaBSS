@@ -11,8 +11,10 @@ var babScriptTester = {
     , gamesSinceUpdate: 0
     , alreadyCalcd: false
     , lastPlayedGameWon: false
+    , sheet: document.styleSheets[2]
     , force_color: "green"
     , lastGamePlayed: false
+    , darkTheme: false
     , lastGame: 0
     , balanceLog: []
     , genOutcomes: function (hash, amount) {
@@ -50,6 +52,21 @@ var babScriptTester = {
         var h = parseInt(hash.slice(0, 52 / 4), 16);
         var e = Math.pow(2, 52);
         return (Math.floor((100 * e - h) / (e - h)) / 100).toFixed(2);
+    }
+}
+babScriptTester.toggleTheme = function () {
+    babScriptTester.darkTheme = (babScriptTester.darkTheme == false);
+    if (babScriptTester.darkTheme) {
+        babScriptTester.sheet.insertRule("legend {color: #FFF;}", 22);
+        babScriptTester.sheet.insertRule("label {color: #FFF;}", 23);
+        babScriptTester.sheet.insertRule("th {color: #FFF;}", 24);
+        document.body.style.backgroundColor = "#181a1e";
+    }
+    else {
+        babScriptTester.sheet.deleteRule(22);
+        babScriptTester.sheet.deleteRule(22);
+        babScriptTester.sheet.deleteRule(22);
+        document.body.style.backgroundColor = "#FFF";
     }
 }
 babScriptTester.simulateFromAuto = function (baseBetInBits, autoCashoutAt, stopAtBits, onLossReturnToBaseBet, onWinReturnToBaseBet, increaseBetByOnLoss, increaseBetByOnWin) {
@@ -159,7 +176,7 @@ babScriptTester.startCalculation = function () {
             if (babScriptTester.makeChart) {
                 babScriptTester.chart = AmCharts.makeChart("chartdiv", {
                     "type": "serial"
-                    , "theme": "none"
+                    , "theme": babScriptTester.darkTheme ? "dark" : "light"
                     , "autoMargins": true
                     , "categoryField": "n"
                     , "valueAxes": [{
@@ -350,4 +367,5 @@ window.onload = function () {
         textareaElement.value = localStorage.getItem(textareaElement.id);
     }
 };
+document.getElementById("switchTheme").addEventListener("click", babScriptTester.toggleTheme);
 document.getElementById("startCalcBtn").addEventListener("click", babScriptTester.startCalculation);

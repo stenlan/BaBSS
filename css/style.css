@@ -93,3 +93,34 @@ input.autoInput {
     cursor: pointer;
     font-weight: normal;
 }
+
+disclaimer {
+    color: #c87629
+}
+
+.themeSwitch {
+    float: right;
+    color: #e58929;
+    border: 2px solid grey;
+    padding: 2px;
+    margin-top: 4px;
+    margin-right: 8px;
+    font-size: 0.8em;
+}
+
+.themeSwitch:hover {
+    cursor: pointer;
+    color: #c87629;
+}
+
+legend {
+    color: "#000";
+}
+
+label {
+    color: "#000";
+}
+
+th {
+    color: "#000";
+}
