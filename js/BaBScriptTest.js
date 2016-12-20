@@ -60,12 +60,14 @@ babScriptTester.toggleTheme = function () {
         babScriptTester.sheet.insertRule("legend {color: #FFF;}", 22);
         babScriptTester.sheet.insertRule("label {color: #FFF;}", 23);
         babScriptTester.sheet.insertRule("th {color: #FFF;}", 24);
+        document.getElementById("switchTheme").innerText = "Go back";
         document.body.style.backgroundColor = "#181a1e";
     }
     else {
         babScriptTester.sheet.deleteRule(22);
         babScriptTester.sheet.deleteRule(22);
         babScriptTester.sheet.deleteRule(22);
+        document.getElementById("switchTheme").innerText = "Go black";
         document.body.style.backgroundColor = "#FFF";
     }
 }
