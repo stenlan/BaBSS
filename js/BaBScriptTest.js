@@ -57,13 +57,17 @@ var babScriptTester = {
 babScriptTester.toggleTheme = function () {
     babScriptTester.darkTheme = (babScriptTester.darkTheme == false);
     if (babScriptTester.darkTheme) {
+        localStorage.setItem("darktheme", "true");
         babScriptTester.sheet.insertRule("legend {color: #FFF;}", 22);
         babScriptTester.sheet.insertRule("label {color: #FFF;}", 23);
         babScriptTester.sheet.insertRule("th {color: #FFF;}", 24);
+        babScriptTester.sheet.insertRule("td {color: #FFF;}", 25);
         document.getElementById("switchTheme").innerText = "Go back";
         document.body.style.backgroundColor = "#181a1e";
     }
     else {
+        localStorage.setItem("darktheme", "false");
+        babScriptTester.sheet.deleteRule(22);
         babScriptTester.sheet.deleteRule(22);
         babScriptTester.sheet.deleteRule(22);
         babScriptTester.sheet.deleteRule(22);
@@ -353,6 +357,10 @@ engine.placeBet = function (bet, multiplier) {
     }
 }
 window.onload = function () {
+    if (localStorage.getItem("darktheme")) {
+        babScriptTester.darkTheme = localStorage.getItem("darktheme") == "false";
+        babScriptTester.toggleTheme();
+    }
     var inputElements = document.getElementsByTagName("input");
     var textareaElement = document.getElementsByTagName("textarea")[0];
     for (var i = 0; i < inputElements.length; i++) {
