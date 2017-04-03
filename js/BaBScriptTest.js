@@ -110,6 +110,9 @@ babScriptTester.simulateFromAuto = function (baseBetInBits, autoCashoutAt, stopA
         }
     });
 }
+
+engine.game_id = 0;
+
 babScriptTester.startCalculation = function () {
         babScriptTester.savePrefs();
         babScriptTester.makeChart = document.getElementById("chartCheckbox").checked;
@@ -143,10 +146,11 @@ babScriptTester.startCalculation = function () {
                 babScriptTester.gamesSinceUpdate++;
                 babScriptTester.currentCrash = babScriptTester.crashList[iterator];
                 babScriptTester.engineFunc("game_starting", {
-                    game_id: "1"
+                    game_id: engine.game_id
                     , time_till_start: 5000
                 });
                 babScriptTester.engineFunc("game_started", {});
+                ++engine.game_id;
                 console.log("Crashing at: " + babScriptTester.currentCrash);
                 babScriptTester.engineFunc("game_crash", {
                     game_crash: babScriptTester.currentCrash * 100
